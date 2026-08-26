@@ -16,6 +16,7 @@ int execute_cmd(char **args, char *program_name);
 char **tokenize_line(char *line);
 char *get_path(void);
 char *find_command(char *command);
+char *build_path(char *dir, char *command);
 
 
 #endif /* SHELL_H */
