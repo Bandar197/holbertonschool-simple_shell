@@ -29,7 +29,7 @@ void run_shell(char *program_name)
 		}
 
 		count++;
-		
+
 		if (line[read_bytes - 1] == '\n')
 			line[read_bytes - 1] = '\0';
 
