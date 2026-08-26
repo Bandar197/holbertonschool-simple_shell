@@ -14,5 +14,6 @@ extern char **environ;
 void run_shell(char *program_name);
 int execute_cmd(char **args, char *program_name);
 char **tokenize_line(char *line);
+char *get_path(void);
 
 #endif /* SHELL_H */
