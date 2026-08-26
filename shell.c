@@ -1,6 +1,33 @@
 #include "shell.h"
 
 /**
+ * handle_builtin - handles shell built-in commands
+ * @args: command and arguments
+ * @line: input line
+ * @status: last command status
+ *
+ * Return: 1 if built-in was handled, 0 otherwise
+ */
+int handle_builtin(char **args, char *line, int *status)
+{
+	if (strcmp(args[0], "exit") == 0)
+	{
+		free(args);
+		free(line);
+		exit(*status);
+	}
+
+	if (strcmp(args[0], "env") == 0)
+	{
+		print_env();
+		*status = 0;
+		return (1);
+	}
+
+	return (0);
+}
+
+/**
  * run_shell - Main loop to process user commands
  * @program_name: Name of the executable (argv[0])
  */
@@ -38,15 +65,9 @@ void run_shell(char *program_name)
 		args = tokenize_line(line);
 
 		if (args && args[0])
-		{	
-			if (strcmp(args[0], "exit") == 0)
-			{
-				free(args);
-				free(line);
-				exit(status);
-			}
-
-			status = execute_cmd(args, program_name, count);
+		{
+			if (!handle_builtin(args, line, &status))
+				status = execute_cmd(args, program_name, count);
 		}
 
 		free(args);
