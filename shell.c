@@ -10,6 +10,9 @@ void run_shell(char *program_name)
 	size_t len = 0;
 	ssize_t read_bytes;
 	char **args;
+	int count;
+
+	count = 0;
 
 	while (1)
 	{
@@ -25,12 +28,14 @@ void run_shell(char *program_name)
 			exit(0);
 		}
 
+		count++;
+		
 		if (line[read_bytes - 1] == '\n')
 			line[read_bytes - 1] = '\0';
 
 		args = tokenize_line(line);
 		if (args && args[0])
-			execute_cmd(args, program_name);
+			execute_cmd(args, program_name, count);
 
 		free(args);
 	}
