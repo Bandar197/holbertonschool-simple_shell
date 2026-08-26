@@ -4,10 +4,11 @@
  * execute_cmd - Forks process and executes the command
  * @args: Array of command and arguments
  * @program_name: Name of executable for error display
+ * @count: Command number
  *
  * Return: 0 on success, 1 on failure
  */
-int execute_cmd(char **args, char *program_name)
+int execute_cmd(char **args, char *program_name, int count)
 {
 	pid_t pid;
 	int status;
@@ -17,8 +18,8 @@ int execute_cmd(char **args, char *program_name)
 
 	if (command_path == NULL)
 	{
-		fprintf(stderr, "%s: %s: not found\n",
-			program_name, args[0]);
+		fprintf(stderr, "%s: %d: %s: not found\n",
+			program_name, count, args[0]);
 		return (1);
 	}
 
