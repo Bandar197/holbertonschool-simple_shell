@@ -11,13 +11,25 @@ int execute_cmd(char **args, char *program_name)
 {
 	pid_t pid;
 	int status;
+	char *command_path;
+
+	command_path = find_command(args[0]);
+
+	if (command_path == NULL)
+	{
+		fprintf(stderr, "%s: %s: not found\n",
+			program_name, args[0]);
+		return (1);
+	}
 
 	pid = fork();
+
 	if (pid == 0)
 	{
-		if (execve(args[0], args, environ) == -1)
+		if (execve(command_path, args, environ) == -1)
 		{
 			perror(program_name);
+			free(command_path);
 			free(args);
 			exit(1);
 		}
@@ -25,11 +37,14 @@ int execute_cmd(char **args, char *program_name)
 	else if (pid < 0)
 	{
 		perror("Fork failed");
+		free(command_path);
 		return (1);
 	}
 	else
 	{
 		wait(&status);
 	}
+
+	free(command_path);
 	return (0);
 }
