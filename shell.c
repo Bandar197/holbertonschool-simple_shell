@@ -11,8 +11,10 @@ void run_shell(char *program_name)
 	ssize_t read_bytes;
 	char **args;
 	int count;
+	int status;
 
 	count = 0;
+	status = 0;
 
 	while (1)
 	{
@@ -25,7 +27,7 @@ void run_shell(char *program_name)
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
 			free(line);
-			exit(0);
+			exit(status);
 		}
 
 		count++;
@@ -35,11 +37,10 @@ void run_shell(char *program_name)
 
 		args = tokenize_line(line);
 		if (args && args[0])
-			execute_cmd(args, program_name, count);
+			status = execute_cmd(args, program_name, count);
 
 		free(args);
 	}
-	free(line);
 }
 
 /**
@@ -52,19 +53,21 @@ char **tokenize_line(char *line)
 {
 	char **tokens;
 	char *token;
-	int i = 0;
+	int i;
 
+	i = 0;
 	tokens = malloc(sizeof(char *) * 64);
-	if (!tokens)
+	if (tokens == NULL)
 		return (NULL);
 
 	token = strtok(line, " \t\r\n\a");
-	while (token)
+	while (token != NULL)
 	{
 		tokens[i] = token;
 		i++;
 		token = strtok(NULL, " \t\r\n\a");
 	}
+
 	tokens[i] = NULL;
 	return (tokens);
 }
