@@ -36,8 +36,18 @@ void run_shell(char *program_name)
 			line[read_bytes - 1] = '\0';
 
 		args = tokenize_line(line);
+
 		if (args && args[0])
+		{	
+			if (strcmp(args[0], "exit") == 0)
+			{
+				free(args);
+				free(line);
+				exit(status);
+			}
+
 			status = execute_cmd(args, program_name, count);
+		}
 
 		free(args);
 	}
