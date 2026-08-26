@@ -42,7 +42,7 @@ char *build_path(char *dir, char *command)
 }
 
 /**
- * find_command - finds a command in PATH
+ * find_command - finds an executable command in PATH
  * @command: command to find
  *
  * Return: full path of command, or NULL if not found
@@ -50,11 +50,10 @@ char *build_path(char *dir, char *command)
 char *find_command(char *command)
 {
 	char *path, *path_copy, *dir, *full_path;
-	struct stat st;
 
 	if (strchr(command, '/') != NULL)
 	{
-		if (stat(command, &st) == 0)
+		if (access(command, X_OK) == 0)
 			return (strdup(command));
 		return (NULL);
 	}
@@ -62,6 +61,7 @@ char *find_command(char *command)
 	path = get_path();
 	if (path == NULL)
 		return (NULL);
+
 	path_copy = strdup(path);
 	if (path_copy == NULL)
 		return (NULL);
@@ -72,14 +72,17 @@ char *find_command(char *command)
 		full_path = build_path(dir, command);
 		if (full_path == NULL)
 			break;
-		if (stat(full_path, &st) == 0)
+
+		if (access(full_path, X_OK) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
+
 		free(full_path);
 		dir = strtok(NULL, ":");
 	}
+
 	free(path_copy);
 	return (NULL);
 }
