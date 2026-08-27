@@ -25,5 +25,19 @@ Example:
 
 .B /bin/ls
 
+Example using PATH:
+
+.B ls
+
+.SH BUILT-INS
+
+.TP
+.B exit
+Exit the shell.
+
+.TP
+.B env
+Print the environment variables.
+
 .SH AUTHORS
 Bandar Aloatibi , Ozoof Jabali
